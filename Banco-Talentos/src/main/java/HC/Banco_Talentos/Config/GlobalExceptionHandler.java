@@ -28,6 +28,11 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 
+    @ExceptionHandler(TecnologiaDuplicadaException.class)
+    public ResponseEntity<?> handleTecnologiaDuplicada(TecnologiaDuplicadaException ex){
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
     // Fallback genérico para exceções não tratadas
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGeneric(Exception ex) {

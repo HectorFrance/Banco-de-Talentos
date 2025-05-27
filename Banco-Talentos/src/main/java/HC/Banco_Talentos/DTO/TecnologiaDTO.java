@@ -1,8 +1,8 @@
 package HC.Banco_Talentos.DTO;
 
-import HC.Banco_Talentos.Enum.Role;
+import HC.Banco_Talentos.Entity.Usuario;
 import HC.Banco_Talentos.Enum.Situacao;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsuarioDTO {
+public class TecnologiaDTO {
 
     @JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
     private Long id;
@@ -21,21 +21,12 @@ public class UsuarioDTO {
     @JsonProperty("nome")
     private String nome;
 
-    @JsonProperty("email")
-    private String email;
-
-    @JsonProperty("cpf")
-    private String cpf;
-
-    @JsonProperty(value = "senha", access = JsonProperty.Access.WRITE_ONLY)
-    private String senha;
+    @JsonProperty(value = "data-criacao", access = JsonProperty.Access.READ_ONLY)
+    private LocalDateTime dataCriacao;
 
     @JsonProperty(value = "situacao", access = JsonProperty.Access.READ_ONLY)
     private Situacao situacao;
 
-    @JsonProperty(value = "data-criacao", access = JsonProperty.Access.READ_ONLY)
-    private LocalDateTime dataCadastro;
-
-    @JsonIgnore
-    private Role role;
+    @JsonProperty(value = "usuario_criacao", access = JsonProperty.Access.READ_ONLY)
+    private UsuarioDTO usuarioCriacao;
 }
