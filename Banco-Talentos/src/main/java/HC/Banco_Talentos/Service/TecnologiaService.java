@@ -37,7 +37,6 @@ public class TecnologiaService {
 
 
         Tecnologia tecnologia = TecnologiaMapper.toEntity(dto);
-        tecnologia.setDataCriacao(LocalDateTime.now());
         tecnologia.setSituacao(Situacao.ATIVO);
         tecnologia.setUsuarioCriacao(ControllerUtils.getUsuarioLogado());
 
