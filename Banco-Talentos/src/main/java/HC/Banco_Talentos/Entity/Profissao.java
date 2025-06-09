@@ -11,30 +11,30 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "TECNOLOGIAS",
+@Table(name = "PROFISSOES",
         uniqueConstraints = {
-                @UniqueConstraint(name = "tecnologia_unique", columnNames = "nome")
+                @UniqueConstraint(name = "profissao_unique", columnNames = "nome")
         })
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Tecnologia {
+public class Profissao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String nome;
-
-    @CreationTimestamp
-    private LocalDateTime dataCriacao;
 
     @Enumerated(EnumType.STRING)
     private Situacao situacao;
 
+    @CreationTimestamp
+    private LocalDateTime dataCadastro;
+
     @ManyToOne
-    @JoinColumn(name = "usuario_criacao_id", nullable = false, foreignKey = @ForeignKey(name = "fk_tecnologia_usuario"))
+    @JoinColumn(name = "usuario_criacao_id", nullable = false, foreignKey = @ForeignKey(name = "fk_profissao_usuario_criacao"))
     private Usuario usuarioCriacao;
 }
