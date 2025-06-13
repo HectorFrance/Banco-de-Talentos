@@ -10,9 +10,12 @@ public class TecnologiaMapper {
 
         dto.setId(tecnologia.getId());
         dto.setNome(tecnologia.getNome());
-        dto.setDataCriacao(tecnologia.getDataCriacao());
+        dto.setDataCadastro(tecnologia.getDataCadastro());
         dto.setSituacao(tecnologia.getSituacao());
-        dto.setUsuarioCriacao(UsuarioMapper.toDTO(tecnologia.getUsuarioCriacao()));
+        dto.setUsuarioCriacao(
+                tecnologia.getUsuarioCriacao() != null?
+                UsuarioMapper.toDTO(tecnologia.getUsuarioCriacao()) : null
+        );
 
         return dto;
     }
@@ -22,9 +25,12 @@ public class TecnologiaMapper {
 
         tecnologia.setId(dto.getId());
         tecnologia.setNome(dto.getNome());
-        tecnologia.setDataCriacao(dto.getDataCriacao());
+        tecnologia.setDataCadastro(dto.getDataCadastro());
         tecnologia.setSituacao(dto.getSituacao());
-        tecnologia.setUsuarioCriacao(UsuarioMapper.toEntity(dto.getUsuarioCriacao()));
+        tecnologia.setUsuarioCriacao(
+                dto.getUsuarioCriacao() != null ?
+                UsuarioMapper.toEntity(dto.getUsuarioCriacao()) : null
+        );
 
         return tecnologia;
     }

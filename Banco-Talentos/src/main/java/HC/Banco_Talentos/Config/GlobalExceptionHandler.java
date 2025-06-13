@@ -28,8 +28,8 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 
-    @ExceptionHandler(TecnologiaDuplicadaException.class)
-    public ResponseEntity<?> handleTecnologiaDuplicada(TecnologiaDuplicadaException ex){
+    @ExceptionHandler(RegistroDuplicadoException.class)
+    public ResponseEntity<?> handleTecnologiaDuplicada(RegistroDuplicadoException ex){
         return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 

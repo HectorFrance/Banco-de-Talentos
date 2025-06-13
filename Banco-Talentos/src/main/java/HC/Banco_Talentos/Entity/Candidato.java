@@ -26,24 +26,26 @@ public class Candidato {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String nome;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false)
     private String telefone;
 
     @ManyToOne
-    @JoinColumn(name = "cargo_id", nullable = false, foreignKey = @ForeignKey(name = "fk_candidato_cargo"))
-    private Cargo cargo;
+    @JoinColumn(name = "cidade_id", foreignKey = @ForeignKey(name = "fk_candidato_cidade"))
+    private Cidade cidade;
 
     @ManyToOne
     @JoinColumn(name = "estado_id", foreignKey = @ForeignKey(name = "fk_candidato_estado"))
     private Estado estado;
 
     @ManyToOne
-    @JoinColumn(name = "cidade_id", foreignKey = @ForeignKey(name = "fk_candidato_cidade"))
-    private Cidade cidade;
+    @JoinColumn(name = "cargo_id", nullable = false, foreignKey = @ForeignKey(name = "fk_candidato_cargo"))
+    private Cargo cargo;
 
     @OneToMany(mappedBy = "candidato", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CandidatoSkill> candidatoSkills;
@@ -53,6 +55,9 @@ public class Candidato {
 
     @OneToMany(mappedBy = "candidato", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Anotacao> anotacoes;
+
+    @Column(name = "caminho_curriculo")
+    private String caminhoCurriculo;
 
     @Enumerated(EnumType.STRING)
     private Situacao situacao;
