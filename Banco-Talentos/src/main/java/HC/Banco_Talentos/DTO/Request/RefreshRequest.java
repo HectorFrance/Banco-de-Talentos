@@ -1,4 +1,4 @@
-package HC.Banco_Talentos.DTO;
+package HC.Banco_Talentos.DTO.Request;
 
 import lombok.Data;
 

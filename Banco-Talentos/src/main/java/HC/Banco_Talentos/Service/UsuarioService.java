@@ -1,7 +1,7 @@
 package HC.Banco_Talentos.Service;
 
-import HC.Banco_Talentos.DTO.AuthResponse;
-import HC.Banco_Talentos.DTO.LoginRequest;
+import HC.Banco_Talentos.DTO.Response.AuthResponse;
+import HC.Banco_Talentos.DTO.Request.LoginRequest;
 import HC.Banco_Talentos.DTO.Mapper.UsuarioMapper;
 import HC.Banco_Talentos.DTO.UsuarioDTO;
 import HC.Banco_Talentos.Entity.Usuario;
@@ -73,7 +73,7 @@ public class UsuarioService {
 
     public AuthResponse cadastrar(UsuarioDTO usuarioDTO) {
         String encodedPassword = passwordEncoder.encode(usuarioDTO.getSenha());
-        Usuario usuario = UsuarioMapper.toEntity(usuarioDTO);
+        Usuario usuario = UsuarioMapper.INSTANCE.toEntity(usuarioDTO);
         usuario.setSenha(encodedPassword);
         usuario.setDataCadastro(LocalDateTime.now());
         usuario.setSituacao(Situacao.ATIVO);

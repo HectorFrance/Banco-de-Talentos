@@ -1,7 +1,8 @@
 package HC.Banco_Talentos.DTO.Mapper;
 
-import HC.Banco_Talentos.DTO.TecnologiaDTO;
-import HC.Banco_Talentos.Entity.Tecnologia;
+
+import HC.Banco_Talentos.DTO.CargoDTO;
+import HC.Banco_Talentos.Entity.Cargo;
 import HC.Banco_Talentos.Entity.Usuario;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -9,20 +10,20 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
-public interface TecnologiaMapper {
+@Mapper(uses = {ProfissaoMapper.class})
+public interface CargoMapper {
 
-    TecnologiaMapper INSTANCE = Mappers.getMapper(TecnologiaMapper.class);
+    CargoMapper INSTANCE = Mappers.getMapper(CargoMapper.class);
 
     @Mapping(source = "usuarioCriacao.id", target = "usuarioCriacao")
-    TecnologiaDTO toDTO(Tecnologia tecnologia);
+    CargoDTO toDTO(Cargo cargo);
 
     @Mapping(target = "usuarioCriacao", expression = "java(usuarioFromId(dto.getUsuarioCriacao()))")
-    Tecnologia toEntity(TecnologiaDTO dto);
+    Cargo toEntity(CargoDTO dto);
 
-    List<TecnologiaDTO> toDTO(List<Tecnologia> teclogiaLista);
+    List<CargoDTO> toDTO(List<Cargo> cargos);
 
-    List<Tecnologia> toEntity(List<TecnologiaDTO> dtoLista);
+    List<Cargo> toEntity(List<CargoDTO> DTOs);
 
     default Usuario usuarioFromId(Long id) {
         if (id == null) return null;

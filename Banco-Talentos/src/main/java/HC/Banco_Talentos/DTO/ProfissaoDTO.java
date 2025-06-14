@@ -1,9 +1,7 @@
 package HC.Banco_Talentos.DTO;
 
-import HC.Banco_Talentos.Entity.Usuario;
 import HC.Banco_Talentos.Enum.Situacao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TecnologiaDTO {
+public class ProfissaoDTO {
 
     @JsonProperty(value = "id")
     private Long id;

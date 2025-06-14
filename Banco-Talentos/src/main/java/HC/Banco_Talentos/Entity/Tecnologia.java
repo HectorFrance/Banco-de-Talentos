@@ -29,7 +29,7 @@ public class Tecnologia {
     private String nome;
 
     @CreationTimestamp
-    private LocalDateTime dataCriacao;
+    private LocalDateTime dataCadastro;
 
     @Enumerated(EnumType.STRING)
     private Situacao situacao;

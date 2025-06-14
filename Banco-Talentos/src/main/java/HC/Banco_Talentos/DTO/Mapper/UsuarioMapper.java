@@ -2,40 +2,15 @@ package HC.Banco_Talentos.DTO.Mapper;
 
 import HC.Banco_Talentos.DTO.UsuarioDTO;
 import HC.Banco_Talentos.Entity.Usuario;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-public class UsuarioMapper {
+@Mapper
+public interface UsuarioMapper {
 
-    public static Usuario toEntity(UsuarioDTO dto){
-        if(dto == null)
-            return null;
+    UsuarioMapper INSTANCE = Mappers.getMapper(UsuarioMapper.class);
 
-        Usuario usuario = new Usuario();
-        usuario.setId(dto.getId());
-        usuario.setNome(dto.getNome());
-        usuario.setEmail(dto.getEmail());
-        usuario.setCpf(dto.getCpf());
-        usuario.setSenha(dto.getSenha());
-        usuario.setSituacao(dto.getSituacao());
-        usuario.setDataCadastro(dto.getDataCadastro());
-        usuario.setRole(dto.getRole());
+     Usuario toEntity(UsuarioDTO dto);
 
-        return usuario;
-    }
-
-    public static UsuarioDTO toDTO(Usuario usuario){
-        if(usuario == null)
-            return null;
-
-        UsuarioDTO dto = new UsuarioDTO();
-        dto.setId(usuario.getId());
-        dto.setNome(usuario.getNome());
-        dto.setEmail(usuario.getEmail());
-        dto.setCpf(usuario.getCpf());
-        dto.setSenha(usuario.getSenha());
-        dto.setSituacao(usuario.getSituacao());
-        dto.setDataCadastro(usuario.getDataCadastro());
-        dto.setRole(usuario.getRole());
-
-        return dto;
-    }
+    UsuarioDTO toDTO(Usuario usuario);
 }
