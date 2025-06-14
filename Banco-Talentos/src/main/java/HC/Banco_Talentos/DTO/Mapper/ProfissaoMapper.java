@@ -2,37 +2,35 @@ package HC.Banco_Talentos.DTO.Mapper;
 
 
 import HC.Banco_Talentos.DTO.ProfissaoDTO;
+import HC.Banco_Talentos.DTO.TecnologiaDTO;
 import HC.Banco_Talentos.Entity.Profissao;
+import HC.Banco_Talentos.Entity.Tecnologia;
+import HC.Banco_Talentos.Entity.Usuario;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-public class ProfissaoMapper {
+import java.util.List;
 
-    public static ProfissaoDTO toDTO(Profissao profissao){
-        ProfissaoDTO dto = new ProfissaoDTO();
+@Mapper
+public interface ProfissaoMapper {
 
-        dto.setId(profissao.getId());
-        dto.setNome(profissao.getNome());
-        dto.setDataCadastro(profissao.getDataCadastro());
-        dto.setSituacao(profissao.getSituacao());
-        dto.setUsuarioCriacao(
-                profissao.getUsuarioCriacao() != null ?
-                        UsuarioMapper.toDTO(profissao.getUsuarioCriacao()) : null
-        );
+    ProfissaoMapper INSTANCE = Mappers.getMapper(ProfissaoMapper.class);
 
-        return dto;
-    }
+    @Mapping(source = "usuarioCriacao.id", target = "usuarioCriacao")
+    ProfissaoDTO toDTO(Profissao profissao);
 
-    public static Profissao toEntity(ProfissaoDTO dto){
-        Profissao profissao = new Profissao();
+    @Mapping(target = "usuarioCriacao", expression = "java(usuarioFromId(dto.getUsuarioCriacao()))")
+    Profissao toEntity(ProfissaoDTO dto);
 
-        profissao.setId(dto.getId());
-        profissao.setNome(dto.getNome());
-        profissao.setDataCadastro(dto.getDataCadastro());
-        profissao.setSituacao(dto.getSituacao());
-        profissao.setUsuarioCriacao(
-                dto.getUsuarioCriacao() != null ?
-                UsuarioMapper.toEntity(dto.getUsuarioCriacao()) : null
-        );
+    List<ProfissaoDTO> toDTO(List<Profissao> teclogiaLista);
 
-        return profissao;
+    List<Profissao> toEntity(List<ProfissaoDTO> dtoLista);
+
+    default Usuario usuarioFromId(Long id) {
+        if (id == null) return null;
+        Usuario usuario = new Usuario();
+        usuario.setId(id);
+        return usuario;
     }
 }

@@ -23,30 +23,27 @@ public class TecnologiaService {
     private final TecnologiaRepository tecnologiaRepository;
 
     public List<TecnologiaDTO> getAll() {
-        return tecnologiaRepository.findAll()
-                .stream()
-                .map(TecnologiaMapper::toDTO)
-                .collect(Collectors.toList());
+        return TecnologiaMapper.INSTANCE.toDTO(tecnologiaRepository.findAll());
     }
 
     public TecnologiaDTO findByid(Long id){
-        return TecnologiaMapper.toDTO(tecnologiaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Tecnologia Não encontrada")));
+        return TecnologiaMapper.INSTANCE.toDTO(tecnologiaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Tecnologia Não encontrada")));
     }
 
     public TecnologiaDTO create(TecnologiaDTO dto) {
 
-        Tecnologia tecnologia = TecnologiaMapper.toEntity(dto);
+        Tecnologia tecnologia = TecnologiaMapper.INSTANCE.toEntity(dto);
         tecnologia.setSituacao(Situacao.ATIVO);
         tecnologia.setUsuarioCriacao(ControllerUtils.getUsuarioLogado());
 
         try {
-            return TecnologiaMapper.toDTO(tecnologiaRepository.save(tecnologia));
+            return TecnologiaMapper.INSTANCE.toDTO(tecnologiaRepository.save(tecnologia));
 
         } catch (DataIntegrityViolationException e) {
             if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException constraintViolation) {
                 String constraintName = constraintViolation.getConstraintName();
 
-                if ("tecnologia_unique".equalsIgnoreCase(constraintName)) {
+                if ("tecnologias.tecnologia_unique".equalsIgnoreCase(constraintName)) {
                     throw new RegistroDuplicadoException("Tecnologia já cadastrada.");
                 }
             }
@@ -59,13 +56,13 @@ public class TecnologiaService {
         Tecnologia tecnologia = tecnologiaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Tecnologia Não encontrada"));
         tecnologia.setNome(dto.getNome());
         try {
-            return TecnologiaMapper.toDTO(tecnologiaRepository.save(tecnologia));
+            return TecnologiaMapper.INSTANCE.toDTO(tecnologiaRepository.save(tecnologia));
 
         } catch (DataIntegrityViolationException e) {
             if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException constraintViolation) {
                 String constraintName = constraintViolation.getConstraintName();
 
-                if ("tecnologia_unique".equalsIgnoreCase(constraintName)) {
+                if ("tecnologias.tecnologia_unique".equalsIgnoreCase(constraintName)) {
                     throw new RegistroDuplicadoException("Tecnologia já cadastrada.");
                 }
             }

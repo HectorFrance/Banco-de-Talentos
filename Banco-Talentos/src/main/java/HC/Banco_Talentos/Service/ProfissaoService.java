@@ -24,30 +24,27 @@ public class ProfissaoService {
     private final ProfissaoRepository profissaoRepository;
 
     public List<ProfissaoDTO> getAll() {
-        return profissaoRepository.findAll()
-                .stream()
-                .map(ProfissaoMapper::toDTO)
-                .collect(Collectors.toList());
+        return ProfissaoMapper.INSTANCE.toDTO(profissaoRepository.findAll());
     }
 
     public ProfissaoDTO findById(Long id) {
-        return ProfissaoMapper.toDTO(profissaoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Profissão não encontrada")));
+        return ProfissaoMapper.INSTANCE.toDTO(profissaoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Profissão não encontrada")));
     }
 
     public ProfissaoDTO create(ProfissaoDTO profissaoDTO) {
 
-        Profissao profissao = ProfissaoMapper.toEntity(profissaoDTO);
+        Profissao profissao = ProfissaoMapper.INSTANCE.toEntity(profissaoDTO);
         profissao.setSituacao(Situacao.ATIVO);
         profissao.setUsuarioCriacao(ControllerUtils.getUsuarioLogado());
 
         try {
-            return ProfissaoMapper.toDTO(profissaoRepository.save(profissao));
+            return ProfissaoMapper.INSTANCE.toDTO(profissaoRepository.save(profissao));
 
         } catch (DataIntegrityViolationException e) {
             if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException constraintViolation) {
                 String constraintName = constraintViolation.getConstraintName();
 
-                if ("profissao_unique".equalsIgnoreCase(constraintName)) {
+                if ("profissoes.profissao_unique".equalsIgnoreCase(constraintName)) {
                     throw new RegistroDuplicadoException("Profissão já cadastrada.");
                 }
             }
@@ -61,13 +58,13 @@ public class ProfissaoService {
         profissao.setNome(profissaoDTO.getNome());
 
         try {
-            return ProfissaoMapper.toDTO(profissaoRepository.save(profissao));
+            return ProfissaoMapper.INSTANCE.toDTO(profissaoRepository.save(profissao));
 
         } catch (DataIntegrityViolationException e) {
             if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException constraintViolation) {
                 String constraintName = constraintViolation.getConstraintName();
 
-                if ("profissao_unique".equalsIgnoreCase(constraintName)) {
+                if ("profissoes.profissao_unique".equalsIgnoreCase(constraintName)) {
                     throw new RegistroDuplicadoException("Profissão já cadastrada.");
                 }
             }

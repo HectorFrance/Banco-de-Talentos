@@ -1,8 +1,8 @@
 package HC.Banco_Talentos.Controller;
 
-import HC.Banco_Talentos.DTO.AuthResponse;
-import HC.Banco_Talentos.DTO.LoginRequest;
-import HC.Banco_Talentos.DTO.RefreshRequest;
+import HC.Banco_Talentos.DTO.Response.AuthResponse;
+import HC.Banco_Talentos.DTO.Request.LoginRequest;
+import HC.Banco_Talentos.DTO.Request.RefreshRequest;
 import HC.Banco_Talentos.DTO.UsuarioDTO;
 import HC.Banco_Talentos.Service.UsuarioService;
 import lombok.RequiredArgsConstructor;
