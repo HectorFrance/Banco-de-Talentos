@@ -16,8 +16,8 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String jwtSecret;
 
-    private static final long EXPIRATION_TIME_ACCESS = 15 * 60 * 1000; // 15 minutos
-    private static final long EXPIRATION_TIME_REFRESH = 7 * 24 * 60 * 60 * 1000; // 7 dias
+    private static final long EXPIRATION_TIME_ACCESS = 24 * 60 * 60 * 1000; // 24 horas
+    private static final long EXPIRATION_TIME_REFRESH = 365 * 24 * 60 * 60 * 1000; // 365 dias
 
     public String gerarAccessToken(String email) {
         Key key = Keys.hmacShaKeyFor(jwtSecret.getBytes());

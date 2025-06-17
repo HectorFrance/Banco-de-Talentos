@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Arquivos ###
+/src/main/resources/uploads/curriculos/*
+!/src/main/resources/uploads/curriculos/.gitkeep

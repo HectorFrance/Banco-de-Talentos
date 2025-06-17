@@ -28,4 +28,10 @@ public class ProfissaoController {
         return ResponseEntity.ok(profissaoService.create(profissaoDTO));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{id}")
+    public ResponseEntity<ProfissaoDTO> alterar(@PathVariable Long id, @RequestBody ProfissaoDTO profissaoDTO) {
+        return ResponseEntity.ok(profissaoService.update(id, profissaoDTO));
+    }
+
 }
