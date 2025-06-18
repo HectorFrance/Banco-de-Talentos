@@ -1,5 +1,6 @@
 package HC.Banco_Talentos.Entity;
 
+import HC.Banco_Talentos.Enum.Situacao;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,6 +31,9 @@ public class CandidatoSkill {
     @ManyToOne(optional = false)
     @JoinColumn(name = "skill_id", nullable = false, foreignKey = @ForeignKey(name = "fk_candidato_skill_skill"))
     private Skill skill;
+
+    @Enumerated(EnumType.STRING)
+    private Situacao situacao;
 
     @CreationTimestamp
     private LocalDateTime dataCadastro;

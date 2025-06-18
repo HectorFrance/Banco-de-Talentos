@@ -1,6 +1,7 @@
 package HC.Banco_Talentos.Controller;
 
-import HC.Banco_Talentos.DTO.SkillDTO;
+import HC.Banco_Talentos.DTO.Request.SkillRequestDTO;
+import HC.Banco_Talentos.DTO.SkillResponseDTO;
 import HC.Banco_Talentos.Service.SkillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +17,12 @@ public class SkillController {
     private final SkillService skillService;
 
     @GetMapping
-    public ResponseEntity<List<SkillDTO>> listAll() {
+    public ResponseEntity<List<SkillResponseDTO>> listAll() {
         return ResponseEntity.ok(skillService.getAll());
     }
 
     @PostMapping
-    public ResponseEntity<SkillDTO> create(@RequestBody SkillDTO dto) {
+    public ResponseEntity<SkillResponseDTO> create(@RequestBody SkillRequestDTO dto) {
         return ResponseEntity.ok(skillService.create(dto));
     }
 }
