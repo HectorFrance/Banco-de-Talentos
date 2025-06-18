@@ -1,7 +1,8 @@
 package HC.Banco_Talentos.Service;
 
 import HC.Banco_Talentos.DTO.Mapper.SkillMapper;
-import HC.Banco_Talentos.DTO.SkillDTO;
+import HC.Banco_Talentos.DTO.Request.SkillRequestDTO;
+import HC.Banco_Talentos.DTO.SkillResponseDTO;
 import HC.Banco_Talentos.Entity.Skill;
 import HC.Banco_Talentos.Enum.Situacao;
 import HC.Banco_Talentos.Exceptions.RegistroDuplicadoException;
@@ -21,21 +22,21 @@ public class SkillService {
     private final SkillRepository skillRepository;
     private final TecnologiaService tecnologiaService;
 
-    public List<SkillDTO> getAll() {
-        return SkillMapper.INSTANCE.toDTO(skillRepository.findAll());
+    public List<SkillResponseDTO> getAll() {
+        return SkillMapper.INSTANCE.toResponseDTO(skillRepository.findAll());
     }
 
-    public SkillDTO findById(Long id) {
-        return SkillMapper.INSTANCE.toDTO(skillRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Skill Não encontrada")));
+    public SkillResponseDTO findById(Long id) {
+        return SkillMapper.INSTANCE.toResponseDTO(skillRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Skill Não encontrada")));
     }
 
-    public SkillDTO create(SkillDTO skillDTO) {
-        Skill skill = SkillMapper.INSTANCE.toEntity(skillDTO);
+    public SkillResponseDTO create(SkillRequestDTO skillRequestDTO) {
+        Skill skill = SkillMapper.INSTANCE.toEntity(skillRequestDTO);
         skill.setSituacao(Situacao.ATIVO);
         skill.setUsuarioCriacao(ControllerUtils.getUsuarioLogado());
 
         try{
-            return SkillMapper.INSTANCE.toDTO(skillRepository.save(skill));
+            return SkillMapper.INSTANCE.toResponseDTO(skillRepository.save(skill));
         }catch (DataIntegrityViolationException e){
             if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException constraintViolation){
                 String constraintName = constraintViolation.getConstraintName();

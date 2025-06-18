@@ -1,7 +1,8 @@
 package HC.Banco_Talentos.Service;
 
-import HC.Banco_Talentos.DTO.CargoDTO;
+import HC.Banco_Talentos.DTO.Request.CargoRequestDTO;
 import HC.Banco_Talentos.DTO.Mapper.CargoMapper;
+import HC.Banco_Talentos.DTO.Response.CargoResponseDTO;
 import HC.Banco_Talentos.Entity.Cargo;
 import HC.Banco_Talentos.Enum.Situacao;
 import HC.Banco_Talentos.Exceptions.RegistroDuplicadoException;
@@ -21,21 +22,21 @@ public class CargoService {
     private final CargoRepository cargoRepository;
     private final ProfissaoService profissaoService;
 
-    public List<CargoDTO> getAll() {
-        return CargoMapper.INSTANCE.toDTO(cargoRepository.findAll());
+    public List<CargoResponseDTO> getAll() {
+        return CargoMapper.INSTANCE.toResponseDTO(cargoRepository.findAll());
     }
 
-    public CargoDTO getById(Long id) {
-        return CargoMapper.INSTANCE.toDTO(cargoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cargo não Encontrado")));
+    public CargoResponseDTO getById(Long id) {
+        return CargoMapper.INSTANCE.toResponseDTO(cargoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cargo não Encontrado")));
     }
 
-    public CargoDTO create(CargoDTO cargoDTO){
-        Cargo cargo = CargoMapper.INSTANCE.toEntity(cargoDTO);
+    public CargoResponseDTO create(CargoRequestDTO cargoRequestDTO){
+        Cargo cargo = CargoMapper.INSTANCE.toEntity(cargoRequestDTO);
         cargo.setSituacao(Situacao.ATIVO);
         cargo.setUsuarioCriacao(ControllerUtils.getUsuarioLogado());
 
         try{
-            return CargoMapper.INSTANCE.toDTO(cargoRepository.save(cargo));
+            return CargoMapper.INSTANCE.toResponseDTO(cargoRepository.save(cargo));
         }catch (DataIntegrityViolationException e){
             if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException constraintViolation){
                 String constraintName = constraintViolation.getConstraintName();

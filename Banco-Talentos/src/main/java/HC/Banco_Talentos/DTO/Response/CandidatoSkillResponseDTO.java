@@ -1,6 +1,6 @@
-package HC.Banco_Talentos.DTO;
+package HC.Banco_Talentos.DTO.Response;
 
-import HC.Banco_Talentos.Enum.Nivel;
+import HC.Banco_Talentos.DTO.SkillResponseDTO;
 import HC.Banco_Talentos.Enum.Situacao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,16 +13,16 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SkillDTO {
+public class CandidatoSkillResponseDTO {
 
     @JsonProperty(value = "id")
     private Long id;
 
-    @JsonProperty("tecnologia")
-    private TecnologiaDTO tecnologia;
+    @JsonProperty(value = "cadidato")
+    private Long candidato;
 
-    @JsonProperty("nivel")
-    private Nivel nivel;
+    @JsonProperty(value = "skill")
+    private SkillResponseDTO skill;
 
     @JsonProperty(value = "situacao", access = JsonProperty.Access.READ_ONLY)
     private Situacao situacao;

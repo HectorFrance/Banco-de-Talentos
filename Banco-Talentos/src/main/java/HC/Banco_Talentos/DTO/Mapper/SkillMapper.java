@@ -1,7 +1,9 @@
 package HC.Banco_Talentos.DTO.Mapper;
 
-import HC.Banco_Talentos.DTO.SkillDTO;
+import HC.Banco_Talentos.DTO.Request.SkillRequestDTO;
+import HC.Banco_Talentos.DTO.SkillResponseDTO;
 import HC.Banco_Talentos.Entity.Skill;
+import HC.Banco_Talentos.Entity.Tecnologia;
 import HC.Banco_Talentos.Entity.Usuario;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,19 +17,33 @@ public interface SkillMapper {
     SkillMapper INSTANCE = Mappers.getMapper(SkillMapper.class);
 
     @Mapping(source = "usuarioCriacao.id", target = "usuarioCriacao")
-    SkillDTO toDTO(Skill skill);
+    @Mapping(source = "tecnologia.id", target = "tecnologia")
+    SkillRequestDTO toDTO(Skill skill);
+
+    @Mapping(source = "tecnologia", target = "tecnologia")
+    @Mapping(source = "usuarioCriacao.id", target = "usuarioCriacao")
+    SkillResponseDTO toResponseDTO(Skill skill);
 
     @Mapping(target = "usuarioCriacao", expression = "java(usuarioFromId(dto.getUsuarioCriacao()))")
-    Skill toEntity(SkillDTO dto);
+    @Mapping(target = "tecnologia", expression = "java(tecnologiaFromId(dto.getTecnologia()))")
+    Skill toEntity(SkillRequestDTO dto);
 
-    List<SkillDTO> toDTO(List<Skill> skill);
+    List<SkillRequestDTO> toDTO(List<Skill> skill);
 
-    List<Skill> toEntity(List<SkillDTO> skillDTOS);
+    List<SkillResponseDTO> toResponseDTO(List<Skill> skill);
+
+    List<Skill> toEntity(List<SkillRequestDTO> skillRequestDTOS);
 
     default Usuario usuarioFromId(Long id) {
         if (id == null) return null;
         Usuario usuario = new Usuario();
         usuario.setId(id);
         return usuario;
+    }
+    default Tecnologia tecnologiaFromId(Long id) {
+        if (id == null) return null;
+        Tecnologia t = new Tecnologia();
+        t.setId(id);
+        return t;
     }
 }
