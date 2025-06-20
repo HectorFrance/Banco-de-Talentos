@@ -14,6 +14,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,15 +31,15 @@ public class CargoService {
         return CargoMapper.INSTANCE.toResponseDTO(cargoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cargo não Encontrado")));
     }
 
-    public CargoResponseDTO create(CargoRequestDTO cargoRequestDTO){
+    public CargoResponseDTO create(CargoRequestDTO cargoRequestDTO) {
         Cargo cargo = CargoMapper.INSTANCE.toEntity(cargoRequestDTO);
         cargo.setSituacao(Situacao.ATIVO);
         cargo.setUsuarioCriacao(ControllerUtils.getUsuarioLogado());
 
-        try{
+        try {
             return CargoMapper.INSTANCE.toResponseDTO(cargoRepository.save(cargo));
-        }catch (DataIntegrityViolationException e){
-            if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException constraintViolation){
+        } catch (DataIntegrityViolationException e) {
+            if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException constraintViolation) {
                 String constraintName = constraintViolation.getConstraintName();
 
                 if ("cargos.uk_profissao_senioridade".equalsIgnoreCase(constraintName)) {
@@ -46,6 +47,18 @@ public class CargoService {
                 }
             }
             throw new RuntimeException("Erro ao salvar Cargo: " + e.getMessage(), e);
+        }
+    }
+
+    public CargoRequestDTO findOrCreate(CargoRequestDTO cargoRequestDTO) {
+        Optional<Cargo> cargoOptional = cargoRepository.findBySenioridadeAndProfissaoId(cargoRequestDTO.getSenioridade(), cargoRequestDTO.getProfissao());
+        if (cargoOptional.isPresent()) {
+            return CargoMapper.INSTANCE.toDTO(cargoOptional.get());
+        } else {
+            CargoResponseDTO cargoNovo = create(cargoRequestDTO);
+            CargoRequestDTO cargoRetorno = new CargoRequestDTO();
+            cargoRetorno.setId(cargoNovo.getId());
+            return cargoRetorno;
         }
     }
 }

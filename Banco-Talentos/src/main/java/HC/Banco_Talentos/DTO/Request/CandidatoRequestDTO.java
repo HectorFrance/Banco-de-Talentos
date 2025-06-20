@@ -1,5 +1,6 @@
 package HC.Banco_Talentos.DTO.Request;
 
+import HC.Banco_Talentos.DTO.AnotacaoDTO;
 import HC.Banco_Talentos.Enum.Situacao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -36,16 +37,16 @@ public class CandidatoRequestDTO {
     private Long estado;
 
     @JsonProperty(value = "cargo")
-    private Long cargo;
+    private CargoRequestDTO cargo;
 
     @JsonProperty(value = "skills")
-    private List<Long> candidatoSkills;
+    private List<CandidatoSkillRequestDTO> candidatoSkills;
 
     @JsonProperty(value = "experiencias")
-    private List<Long> experiencias;
+    private List<ExperienciaRequestDTO> experiencias;
 
     @JsonProperty(value = "anotacoes")
-    private List<Long> anotacoes;
+    private List<AnotacaoDTO> anotacoes;
 
     @JsonProperty(value = "curriculo")
     private String caminhoCurriculo;
