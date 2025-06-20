@@ -25,20 +25,20 @@ public interface CandidatoMapper {
 
     @Mapping(source = "cidade.id", target = "cidade")
     @Mapping(source = "estado.id", target = "estado")
-    @Mapping(source = "cargo.id", target = "cargo")
+    @Mapping(source = "cargo", target = "cargo")
     @Mapping(source = "usuarioCriacao.id", target = "usuarioCriacao")
-    @Mapping(target = "candidatoSkills", expression = "java(candidatoSkillIdsFromList(candidato.getCandidatoSkills()))")
-    @Mapping(target = "experiencias", expression = "java(experienciaIdsFromList(candidato.getExperiencias()))")
-    @Mapping(target = "anotacoes", expression = "java(anotacaoIdsFromList(candidato.getAnotacoes()))")
+    @Mapping(source = "candidatoSkills", target = "candidatoSkills")
+    @Mapping(source = "experiencias", target = "experiencias")
+    @Mapping(source = "anotacoes", target = "anotacoes")
     CandidatoRequestDTO toDTO(Candidato candidato);
 
     @Mapping(target = "cidade", expression = "java(cidadeFromId(dto.getCidade()))")
     @Mapping(target = "estado", expression = "java(estadoFromId(dto.getEstado()))")
-    @Mapping(target = "cargo", expression = "java(cargoFromId(dto.getCargo()))")
+    @Mapping(source = "cargo", target = "cargo")
     @Mapping(target = "usuarioCriacao", expression = "java(usuarioFromId(dto.getUsuarioCriacao()))")
-    @Mapping(target = "candidatoSkills", expression = "java(candidatoSkillsFromIds(dto.getCandidatoSkills()))")
-    @Mapping(target = "experiencias", expression = "java(experienciasFromIds(dto.getExperiencias()))")
-    @Mapping(target = "anotacoes", expression = "java(anotacoesFromIds(dto.getAnotacoes()))")
+    @Mapping(source = "candidatoSkills", target = "candidatoSkills")
+    @Mapping(source = "experiencias", target = "experiencias")
+    @Mapping(source = "anotacoes", target = "anotacoes")
     Candidato toEntity(CandidatoRequestDTO dto);
 
     List<CandidatoRequestDTO> toDTO(List<Candidato> candidatos);
