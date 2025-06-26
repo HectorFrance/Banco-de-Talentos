@@ -72,7 +72,7 @@ public class CandidatoService {
 
         try {
             Candidato candidatoSalvo = candidatoRepository.save(candidato);
-            candidatoSalvo.setCaminhoCurriculo(fileStorageService.salvarCurriculo(curriculo, candidatoSalvo.getNome().trim()));
+            candidatoSalvo.setCaminhoCurriculo(fileStorageService.salvarCurriculo(curriculo, candidatoSalvo.getNome().replaceAll("\\s+", "")));
             candidatoSalvo = candidatoRepository.save(candidatoSalvo);
             return CandidatoMapper.INSTANCE.toResponseDTO(candidatoSalvo);
 
