@@ -33,5 +33,5 @@ build/
 .vscode/
 
 ### Arquivos ###
-/src/main/resources/uploads/curriculos/*
-!/src/main/resources/uploads/curriculos/.gitkeep
+/uploads/curriculos/*
+!/uploads/curriculos/.gitkeep

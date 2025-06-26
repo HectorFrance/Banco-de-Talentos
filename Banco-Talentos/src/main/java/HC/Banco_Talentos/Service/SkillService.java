@@ -1,6 +1,7 @@
 package HC.Banco_Talentos.Service;
 
 import HC.Banco_Talentos.DTO.Mapper.SkillMapper;
+import HC.Banco_Talentos.DTO.Request.CargoRequestDTO;
 import HC.Banco_Talentos.DTO.Request.SkillRequestDTO;
 import HC.Banco_Talentos.DTO.SkillResponseDTO;
 import HC.Banco_Talentos.Entity.Skill;
@@ -14,6 +15,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +48,19 @@ public class SkillService {
                 }
             }
             throw new RuntimeException("Erro ao salvar Skill: " + e.getMessage(), e);
+        }
+    }
+
+    public SkillRequestDTO findOrCreate(SkillRequestDTO skillRequestDTO){
+        Optional<Skill> skillOptional = skillRepository.findByTecnologiaIdAndNivel(skillRequestDTO.getTecnologia(),skillRequestDTO.getNivel());
+
+        if(skillOptional.isPresent()){
+            return SkillMapper.INSTANCE.toDTO(skillOptional.get());
+        } else {
+            SkillResponseDTO skillNova = create(skillRequestDTO);
+            SkillRequestDTO skillRetorno = new SkillRequestDTO();
+            skillRetorno.setId(skillNova.getId());
+            return skillRetorno;
         }
     }
 }

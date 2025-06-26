@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,7 +27,8 @@ public class CandidatoController {
     }
 
     @PostMapping
-    public ResponseEntity<CandidatoResponseDTO> cadastrar(@RequestBody CandidatoRequestDTO candidatoRequestDTO){
-        return ResponseEntity.ok(candidatoService.create(candidatoRequestDTO));
+    public ResponseEntity<CandidatoResponseDTO> cadastrar( @RequestPart("candidato") CandidatoRequestDTO candidatoRequestDTO,
+                                                           @RequestPart("curriculo") MultipartFile curriculo){
+        return ResponseEntity.ok(candidatoService.create(candidatoRequestDTO, curriculo));
     }
 }

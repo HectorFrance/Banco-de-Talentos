@@ -18,7 +18,7 @@ public class ExperienciaRequestDTO {
     private Long id;
 
     @JsonProperty(value = "cargo")
-    private Long cargo;
+    private CargoRequestDTO cargo;
 
     @JsonProperty(value = "inicio")
     private LocalDateTime dataInicio;

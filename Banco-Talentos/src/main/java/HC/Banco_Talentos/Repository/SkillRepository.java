@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface SkillRepository extends JpaRepository<Skill, Long> {
 
-    Optional<Skill> findByTecnologiaAndNivel(Tecnologia tecnologia, Nivel nivel);
+    Optional<Skill> findByTecnologiaIdAndNivel(Long tecnologia, Nivel nivel);
 }

@@ -26,7 +26,7 @@ public interface CandidatoSkillMapper {
 
     @Mapping(target = "usuarioCriacao", expression = "java(usuarioFromId(dto.getUsuarioCriacao()))")
     @Mapping(target = "candidato", expression = "java(candidatoFromId(dto.getCandidato()))")
-    @Mapping(target = "skill", expression = "java(skillFromId(dto.getSkill()))")
+    @Mapping(source = "skill", target = "skill")
     CandidatoSkill toEntity(CandidatoSkillRequestDTO dto);
 
     List<CandidatoSkillRequestDTO> toDTO(List<CandidatoSkill> candidatoSkills);

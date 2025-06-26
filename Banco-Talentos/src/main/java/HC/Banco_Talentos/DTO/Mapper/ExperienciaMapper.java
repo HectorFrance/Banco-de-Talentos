@@ -19,7 +19,7 @@ public interface ExperienciaMapper {
 
     @Mapping(source = "usuarioCriacao.id", target = "usuarioCriacao")
     @Mapping(source = "candidato.id", target = "candidato")
-    @Mapping(source = "cargo.id", target = "cargo")
+    @Mapping(source = "cargo", target = "cargo")
     ExperienciaRequestDTO toDTO(Experiencia experiencia);
 
     @Mapping(source = "usuarioCriacao.id", target = "usuarioCriacao")
@@ -29,7 +29,7 @@ public interface ExperienciaMapper {
 
     @Mapping(target = "usuarioCriacao", expression = "java(usuarioFromId(dto.getUsuarioCriacao()))")
     @Mapping(target = "candidato", expression = "java(candidatoFromId(dto.getCandidato()))")
-    @Mapping(target = "cargo", expression = "java(cargoFromId(dto.getCargo()))")
+    @Mapping(source = "cargo", target = "cargo")
     Experiencia toEntity(ExperienciaRequestDTO dto);
 
     List<ExperienciaRequestDTO> toDTO(List<Experiencia> experiencias);

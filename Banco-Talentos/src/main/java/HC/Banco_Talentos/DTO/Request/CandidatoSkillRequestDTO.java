@@ -21,7 +21,7 @@ public class CandidatoSkillRequestDTO {
     private Long candidato;
 
     @JsonProperty(value = "skill")
-    private Long skill;
+    private SkillRequestDTO skill;
 
     @JsonProperty(value = "situacao", access = JsonProperty.Access.READ_ONLY)
     private Situacao situacao;
