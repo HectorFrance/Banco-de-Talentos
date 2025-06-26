@@ -14,7 +14,8 @@ import java.util.List;
 @Entity
 @Table(name = "CANDIDATOS",
         uniqueConstraints = {
-                @UniqueConstraint(name = "candidato_email_unique", columnNames = "email")
+                @UniqueConstraint(name = "candidato_email_unique", columnNames = "email"),
+                @UniqueConstraint(name = "candidato_cpf_unique", columnNames = "cpf")
         })
 @Data
 @NoArgsConstructor
@@ -31,6 +32,9 @@ public class Candidato {
 
     @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(unique = true)
+    private String cpf;
 
     @Column(nullable = false)
     private String telefone;

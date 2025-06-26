@@ -23,6 +23,9 @@ public class CandidatoRequestDTO {
     @JsonProperty(value = "nome")
     private String nome;
 
+    @JsonProperty(value = "cpf")
+    private String cpf;
+
     @JsonProperty(value = "email")
     private String email;
 
@@ -47,9 +50,6 @@ public class CandidatoRequestDTO {
 
     @JsonProperty(value = "anotacoes")
     private List<AnotacaoDTO> anotacoes;
-
-    @JsonProperty(value = "curriculo")
-    private String caminhoCurriculo;
 
     @JsonProperty(value = "situacao", access = JsonProperty.Access.READ_ONLY)
     private Situacao situacao;
