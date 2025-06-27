@@ -20,7 +20,7 @@ public class AnotacaoDTO {
     @JsonProperty(value = "descricao")
     private String descricao;
 
-    @JsonProperty(value = "cadidato")
+    @JsonProperty(value = "candidato")
     private Long candidato;
 
     @JsonProperty(value = "situacao", access = JsonProperty.Access.READ_ONLY)

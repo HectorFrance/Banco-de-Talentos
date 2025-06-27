@@ -18,7 +18,7 @@ public class CandidatoSkillResponseDTO {
     @JsonProperty(value = "id")
     private Long id;
 
-    @JsonProperty(value = "cadidato")
+    @JsonProperty(value = "candidato")
     private Long candidato;
 
     @JsonProperty(value = "skill")
