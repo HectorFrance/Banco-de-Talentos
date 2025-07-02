@@ -23,8 +23,8 @@ public class CandidatoSkillController {
     }
 
     @PostMapping
-    public ResponseEntity<CandidatoSkillResponseDTO> create(@RequestBody CandidatoSkillRequestDTO candidatoSkillRequestDTO){
-        return ResponseEntity.ok(candidatoSkillService.create(candidatoSkillRequestDTO));
+    public ResponseEntity<CandidatoSkillResponseDTO> create(@RequestBody CandidatoSkillRequestDTO dto){
+        return ResponseEntity.ok(candidatoSkillService.create(dto));
     }
 
 }
