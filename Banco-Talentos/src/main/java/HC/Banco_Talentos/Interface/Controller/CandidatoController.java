@@ -24,6 +24,13 @@ public class CandidatoController {
         return ResponseEntity.ok(candidatoService.getAll(PageRequest.of(page, limit)));
     }
 
+    @GetMapping("/tecnologia/{tecnologiaId:\\d+}")
+    public ResponseEntity<Page<CandidatoResponseDTO>> getByTecnologia( @RequestParam(name = "page", defaultValue = "0") int page,
+                                                                       @RequestParam(name = "limit", defaultValue = "10") int limit,
+                                                                       @PathVariable Long tecnologiaId){
+        return ResponseEntity.ok(candidatoService.getByTecnologia(PageRequest.of(page, limit), tecnologiaId));
+    }
+
     @PostMapping
     public ResponseEntity<CandidatoResponseDTO> cadastrar( @RequestPart("candidato") CandidatoRequestDTO candidatoRequestDTO,
                                                            @RequestPart("curriculo") MultipartFile curriculo){

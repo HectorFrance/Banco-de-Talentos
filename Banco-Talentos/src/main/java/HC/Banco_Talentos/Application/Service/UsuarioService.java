@@ -10,7 +10,7 @@ import HC.Banco_Talentos.Domain.Enum.Situacao;
 import HC.Banco_Talentos.Shared.Exceptions.CpfInvalidoException;
 import HC.Banco_Talentos.Shared.Exceptions.EmailInvalidoException;
 import HC.Banco_Talentos.Shared.Exceptions.UsuarioDuplicadoException;
-import HC.Banco_Talentos.Domain.Repository.UsuarioRepository;
+import HC.Banco_Talentos.Infrastructure.Repository.UsuarioRepository;
 import HC.Banco_Talentos.Infrastructure.Security.JwtUtil;
 import HC.Banco_Talentos.Shared.Utils.DocumentoUtils;
 import HC.Banco_Talentos.Shared.Utils.EmailUtils;

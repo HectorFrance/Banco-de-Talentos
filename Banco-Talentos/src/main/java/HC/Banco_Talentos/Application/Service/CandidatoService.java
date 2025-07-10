@@ -1,5 +1,6 @@
 package HC.Banco_Talentos.Application.Service;
 
+import HC.Banco_Talentos.Infrastructure.Specification.CandidatoSpecification;
 import HC.Banco_Talentos.Interface.DTO.Mapper.CandidatoMapper;
 import HC.Banco_Talentos.Interface.DTO.Request.CandidatoRequestDTO;
 import HC.Banco_Talentos.Interface.DTO.Request.CargoRequestDTO;
@@ -8,13 +9,14 @@ import HC.Banco_Talentos.Interface.DTO.Response.CandidatoResponseDTO;
 import HC.Banco_Talentos.Domain.Entity.Candidato;
 import HC.Banco_Talentos.Domain.Enum.Situacao;
 import HC.Banco_Talentos.Shared.Exceptions.RegistroDuplicadoException;
-import HC.Banco_Talentos.Domain.Repository.CandidatoRepository;
+import HC.Banco_Talentos.Infrastructure.Repository.CandidatoRepository;
 import HC.Banco_Talentos.Shared.Utils.ControllerUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,6 +37,12 @@ public class CandidatoService {
 
     public CandidatoResponseDTO getByID(Long id){
         return CandidatoMapper.INSTANCE.toResponseDTO(candidatoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Candidadto não Encontrado")));
+    }
+
+    public Page<CandidatoResponseDTO> getByTecnologia(Pageable pageable, Long idTecnologia){
+        Specification<Candidato> spec = CandidatoSpecification.comTecnologia(idTecnologia);
+
+        return candidatoRepository.findAll(spec, pageable).map(CandidatoMapper.INSTANCE :: toResponseDTO);
     }
 
     public CandidatoResponseDTO create(CandidatoRequestDTO candidatoRequestDTO, MultipartFile curriculo){
@@ -67,7 +75,10 @@ public class CandidatoService {
         }
 
         if (candidato.getAnotacoes() != null) {
-            candidato.getAnotacoes().forEach(anotacao -> anotacao.setCandidato(candidato));
+            candidato.getAnotacoes().forEach(anotacao -> {
+                anotacao.setCandidato(candidato);
+                anotacao.setUsuarioCriacao(ControllerUtils.getUsuarioLogado());
+            });
         }
 
         try {

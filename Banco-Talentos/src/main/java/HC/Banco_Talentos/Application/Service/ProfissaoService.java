@@ -5,7 +5,7 @@ import HC.Banco_Talentos.Interface.DTO.ProfissaoDTO;
 import HC.Banco_Talentos.Domain.Entity.Profissao;
 import HC.Banco_Talentos.Domain.Enum.Situacao;
 import HC.Banco_Talentos.Shared.Exceptions.RegistroDuplicadoException;
-import HC.Banco_Talentos.Domain.Repository.ProfissaoRepository;
+import HC.Banco_Talentos.Infrastructure.Repository.ProfissaoRepository;
 import HC.Banco_Talentos.Shared.Utils.ControllerUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

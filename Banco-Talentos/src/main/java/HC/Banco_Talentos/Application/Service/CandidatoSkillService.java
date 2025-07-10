@@ -7,7 +7,7 @@ import HC.Banco_Talentos.Interface.DTO.Response.CandidatoSkillResponseDTO;
 import HC.Banco_Talentos.Domain.Entity.CandidatoSkill;
 import HC.Banco_Talentos.Domain.Enum.Situacao;
 import HC.Banco_Talentos.Shared.Exceptions.RegistroDuplicadoException;
-import HC.Banco_Talentos.Domain.Repository.CandidatoSkillRepository;
+import HC.Banco_Talentos.Infrastructure.Repository.CandidatoSkillRepository;
 import HC.Banco_Talentos.Shared.Utils.ControllerUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
 package HC.Banco_Talentos.Infrastructure.Config;
 
-import HC.Banco_Talentos.Domain.Repository.UsuarioRepository;
+import HC.Banco_Talentos.Infrastructure.Repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

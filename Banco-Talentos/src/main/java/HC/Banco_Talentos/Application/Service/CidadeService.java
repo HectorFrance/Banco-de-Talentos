@@ -1,7 +1,7 @@
 package HC.Banco_Talentos.Application.Service;
 
 import HC.Banco_Talentos.Domain.Entity.Cidade;
-import HC.Banco_Talentos.Domain.Repository.CidadeRepository;
+import HC.Banco_Talentos.Infrastructure.Repository.CidadeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

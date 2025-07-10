@@ -6,7 +6,7 @@ import HC.Banco_Talentos.Interface.DTO.Response.CargoResponseDTO;
 import HC.Banco_Talentos.Domain.Entity.Cargo;
 import HC.Banco_Talentos.Domain.Enum.Situacao;
 import HC.Banco_Talentos.Shared.Exceptions.RegistroDuplicadoException;
-import HC.Banco_Talentos.Domain.Repository.CargoRepository;
+import HC.Banco_Talentos.Infrastructure.Repository.CargoRepository;
 import HC.Banco_Talentos.Shared.Utils.ControllerUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

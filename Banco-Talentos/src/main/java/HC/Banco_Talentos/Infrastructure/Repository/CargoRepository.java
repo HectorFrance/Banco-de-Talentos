@@ -1,4 +1,4 @@
-package HC.Banco_Talentos.Domain.Repository;
+package HC.Banco_Talentos.Infrastructure.Repository;
 
 import HC.Banco_Talentos.Domain.Entity.Cargo;
 import HC.Banco_Talentos.Domain.Enum.Senioridade;
