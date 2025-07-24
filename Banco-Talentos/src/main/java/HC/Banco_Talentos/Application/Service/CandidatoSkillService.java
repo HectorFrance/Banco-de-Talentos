@@ -1,5 +1,6 @@
 package HC.Banco_Talentos.Application.Service;
 
+import HC.Banco_Talentos.Domain.Entity.Skill;
 import HC.Banco_Talentos.Interface.DTO.Mapper.CandidatoSkillMapper;
 import HC.Banco_Talentos.Interface.DTO.Request.CandidatoSkillRequestDTO;
 import HC.Banco_Talentos.Interface.DTO.Request.SkillRequestDTO;
@@ -25,29 +26,30 @@ public class CandidatoSkillService {
     private final CandidatoSkillRepository candidatoSkillRepository;
     private final SkillService skillService;
 
-    public Page<CandidatoSkillResponseDTO> getAll(Pageable pageable) {
-        return candidatoSkillRepository.findAll(pageable).map(CandidatoSkillMapper.INSTANCE::toResponseDTO);
+    public Page<CandidatoSkill> getAll(Pageable pageable) {
+        return candidatoSkillRepository.findAll(pageable);
     }
 
-    public List<CandidatoSkillResponseDTO> getByCandidatoId(Long id) {
-        return CandidatoSkillMapper.INSTANCE.toResponseDTO(candidatoSkillRepository.findByCandidatoId(id));
+    public List<CandidatoSkill> getByCandidatoId(Long id) {
+        return candidatoSkillRepository.findByCandidatoId(id);
     }
 
-    public CandidatoSkillResponseDTO findById(Long id) {
-        return CandidatoSkillMapper.INSTANCE.toResponseDTO(candidatoSkillRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Skill não encontrada")));
+    public CandidatoSkill findById(Long id) {
+        return candidatoSkillRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Skill não encontrada"));
     }
 
-    public CandidatoSkillResponseDTO create(CandidatoSkillRequestDTO candidatoSkillRequestDTO) {
-        SkillRequestDTO skill = skillService.findOrCreate(candidatoSkillRequestDTO.getSkill());
-        candidatoSkillRequestDTO.setSkill(skill);
+    public CandidatoSkill create(CandidatoSkillRequestDTO candidatoSkillRequestDTO) {
+        Skill skill = skillService.findOrCreate(candidatoSkillRequestDTO.getSkill());
 
         CandidatoSkill candidatoSkill = CandidatoSkillMapper.INSTANCE.toEntity(candidatoSkillRequestDTO);
+
+        candidatoSkill.setSkill(skill);
         candidatoSkill.setSituacao(Situacao.ATIVO);
         candidatoSkill.setUsuarioCriacao(ControllerUtils.getUsuarioLogado());
 
         try {
             CandidatoSkill candidatoSkillSalvoSalva = candidatoSkillRepository.save(candidatoSkill);
-            return CandidatoSkillMapper.INSTANCE.toResponseDTO(candidatoSkillSalvoSalva);
+            return candidatoSkillSalvoSalva;
 
         } catch (DataIntegrityViolationException e) {
             if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException constraintViolation) {

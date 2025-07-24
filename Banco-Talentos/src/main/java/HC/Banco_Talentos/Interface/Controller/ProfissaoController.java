@@ -1,5 +1,6 @@
 package HC.Banco_Talentos.Interface.Controller;
 
+import HC.Banco_Talentos.Interface.DTO.Mapper.ProfissaoMapper;
 import HC.Banco_Talentos.Interface.DTO.ProfissaoDTO;
 import HC.Banco_Talentos.Application.Service.ProfissaoService;
 import lombok.RequiredArgsConstructor;
@@ -18,19 +19,19 @@ public class ProfissaoController {
 
     @GetMapping
     public ResponseEntity<List<ProfissaoDTO>> listAll() {
-        return ResponseEntity.ok(profissaoService.getAll());
+        return ResponseEntity.ok(profissaoService.getAll().stream().map(ProfissaoMapper.INSTANCE :: toDTO).toList());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ProfissaoDTO> cadastrar(@RequestBody ProfissaoDTO profissaoDTO) {
-        return ResponseEntity.ok(profissaoService.create(profissaoDTO));
+        return ResponseEntity.ok(ProfissaoMapper.INSTANCE.toDTO(profissaoService.create(profissaoDTO)));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<ProfissaoDTO> alterar(@PathVariable Long id, @RequestBody ProfissaoDTO profissaoDTO) {
-        return ResponseEntity.ok(profissaoService.update(id, profissaoDTO));
+        return ResponseEntity.ok(ProfissaoMapper.INSTANCE.toDTO(profissaoService.update(id, profissaoDTO)));
     }
 
 }

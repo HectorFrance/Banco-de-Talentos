@@ -1,6 +1,7 @@
 package HC.Banco_Talentos.Interface.Controller;
 
 
+import HC.Banco_Talentos.Interface.DTO.Mapper.CandidatoMapper;
 import HC.Banco_Talentos.Interface.DTO.Request.CandidatoRequestDTO;
 import HC.Banco_Talentos.Interface.DTO.Response.CandidatoResponseDTO;
 import HC.Banco_Talentos.Application.Service.CandidatoService;
@@ -21,19 +22,19 @@ public class CandidatoController {
     @GetMapping
     public ResponseEntity<Page<CandidatoResponseDTO>> listAll( @RequestParam(name = "page", defaultValue = "0") int page,
                                                                @RequestParam(name = "limit", defaultValue = "10") int limit){
-        return ResponseEntity.ok(candidatoService.getAll(PageRequest.of(page, limit)));
+        return ResponseEntity.ok(candidatoService.getAll(PageRequest.of(page, limit)).map(CandidatoMapper.INSTANCE :: toResponseDTO));
     }
 
     @GetMapping("/tecnologia/{tecnologiaId:\\d+}")
     public ResponseEntity<Page<CandidatoResponseDTO>> getByTecnologia( @RequestParam(name = "page", defaultValue = "0") int page,
                                                                        @RequestParam(name = "limit", defaultValue = "10") int limit,
                                                                        @PathVariable Long tecnologiaId){
-        return ResponseEntity.ok(candidatoService.getByTecnologia(PageRequest.of(page, limit), tecnologiaId));
+        return ResponseEntity.ok(candidatoService.getByTecnologia(PageRequest.of(page, limit), tecnologiaId).map(CandidatoMapper.INSTANCE :: toResponseDTO));
     }
 
     @PostMapping
     public ResponseEntity<CandidatoResponseDTO> cadastrar( @RequestPart("candidato") CandidatoRequestDTO candidatoRequestDTO,
                                                            @RequestPart("curriculo") MultipartFile curriculo){
-        return ResponseEntity.ok(candidatoService.create(candidatoRequestDTO, curriculo));
+        return ResponseEntity.ok(CandidatoMapper.INSTANCE.toResponseDTO(candidatoService.create(candidatoRequestDTO, curriculo)));
     }
 }
