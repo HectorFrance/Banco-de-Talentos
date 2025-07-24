@@ -1,11 +1,14 @@
 package HC.Banco_Talentos.Application.Service;
 
+import HC.Banco_Talentos.Domain.Entity.Cargo;
+import HC.Banco_Talentos.Domain.Entity.Skill;
+import HC.Banco_Talentos.Domain.Entity.Usuario;
 import HC.Banco_Talentos.Infrastructure.Specification.CandidatoSpecification;
 import HC.Banco_Talentos.Interface.DTO.Mapper.CandidatoMapper;
+import HC.Banco_Talentos.Interface.DTO.Mapper.CargoMapper;
+import HC.Banco_Talentos.Interface.DTO.Mapper.SkillMapper;
 import HC.Banco_Talentos.Interface.DTO.Request.CandidatoRequestDTO;
-import HC.Banco_Talentos.Interface.DTO.Request.CargoRequestDTO;
-import HC.Banco_Talentos.Interface.DTO.Request.SkillRequestDTO;
-import HC.Banco_Talentos.Interface.DTO.Response.CandidatoResponseDTO;
+
 import HC.Banco_Talentos.Domain.Entity.Candidato;
 import HC.Banco_Talentos.Domain.Enum.Situacao;
 import HC.Banco_Talentos.Shared.Exceptions.RegistroDuplicadoException;
@@ -31,75 +34,105 @@ public class CandidatoService {
     private final SkillService skillService;
     private final FileStorageService fileStorageService;
 
-    public Page<CandidatoResponseDTO> getAll(Pageable pageable){
-        return candidatoRepository.findAll(pageable).map(CandidatoMapper.INSTANCE :: toResponseDTO);
+    public Page<Candidato> getAll(Pageable pageable) {
+        return candidatoRepository.findAll(pageable);
     }
 
-    public CandidatoResponseDTO getByID(Long id){
-        return CandidatoMapper.INSTANCE.toResponseDTO(candidatoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Candidadto não Encontrado")));
+    public Candidato getByID(Long id) {
+        return candidatoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Candidadto não Encontrado"));
     }
 
-    public Page<CandidatoResponseDTO> getByTecnologia(Pageable pageable, Long idTecnologia){
+    public Page<Candidato> getByTecnologia(Pageable pageable, Long idTecnologia) {
         Specification<Candidato> spec = CandidatoSpecification.comTecnologia(idTecnologia);
 
-        return candidatoRepository.findAll(spec, pageable).map(CandidatoMapper.INSTANCE :: toResponseDTO);
+        return candidatoRepository.findAll(spec, pageable);
     }
 
-    public CandidatoResponseDTO create(CandidatoRequestDTO candidatoRequestDTO, MultipartFile curriculo){
-        candidatoRequestDTO.setCargo(cargoService.findOrCreate(candidatoRequestDTO.getCargo()));
-
-        if (candidatoRequestDTO.getExperiencias() != null) {
-            candidatoRequestDTO.getExperiencias().forEach(experienciaRequestDTO -> {
-                CargoRequestDTO cargo = cargoService.findOrCreate(experienciaRequestDTO.getCargo());
-                experienciaRequestDTO.setCargo(cargo);
-            });
-        }
-
-        if (candidatoRequestDTO.getCandidatoSkills() != null) {
-            candidatoRequestDTO.getCandidatoSkills().forEach(candidatoSkillRequestDTO -> {
-                SkillRequestDTO skill = skillService.findOrCreate(candidatoSkillRequestDTO.getSkill());
-                candidatoSkillRequestDTO.setSkill(skill);
-            });
-        }
-
+    public Candidato create(CandidatoRequestDTO candidatoRequestDTO, MultipartFile curriculo) {
         Candidato candidato = CandidatoMapper.INSTANCE.toEntity(candidatoRequestDTO);
-        candidato.setSituacao(Situacao.ATIVO);
+
+        fillCargosAndSkills(candidato);
+
         candidato.setUsuarioCriacao(ControllerUtils.getUsuarioLogado());
+        candidato.setSituacao(Situacao.ATIVO);
 
-        if (candidato.getCandidatoSkills() != null) {
-            candidato.getCandidatoSkills().forEach(skill -> skill.setCandidato(candidato));
-        }
-
-        if (candidato.getExperiencias() != null) {
-            candidato.getExperiencias().forEach(experiencia -> experiencia.setCandidato(candidato));
-        }
-
-        if (candidato.getAnotacoes() != null) {
-            candidato.getAnotacoes().forEach(anotacao -> {
-                anotacao.setCandidato(candidato);
-                anotacao.setUsuarioCriacao(ControllerUtils.getUsuarioLogado());
-            });
-        }
+        vincularEntidadesFilhas(candidato);
 
         try {
             Candidato candidatoSalvo = candidatoRepository.save(candidato);
-            candidatoSalvo.setCaminhoCurriculo(fileStorageService.salvarCurriculo(curriculo, candidatoSalvo.getNome().replaceAll("\\s+", "")));
-            candidatoSalvo = candidatoRepository.save(candidatoSalvo);
-            return CandidatoMapper.INSTANCE.toResponseDTO(candidatoSalvo);
+            saveCurriculo(candidatoSalvo.getId(), curriculo);
+            return candidatoSalvo;
 
         } catch (DataIntegrityViolationException e) {
             if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException constraintViolation) {
                 String constraintName = constraintViolation.getConstraintName();
 
-                if ("candidadtos.candidato_email_unique".equalsIgnoreCase(constraintName)) {
+                if ("candidatos.candidato_email_unique".equalsIgnoreCase(constraintName)) {
                     throw new RegistroDuplicadoException("Candidato já cadastrado com esse E-mail.");
-                } else if ("candidadtos.candidato_cpf_unique".equalsIgnoreCase(constraintName)) {
+                } else if ("candidatos.candidato_cpf_unique".equalsIgnoreCase(constraintName)) {
                     throw new RegistroDuplicadoException("Candidato já cadastrado com esse CPF.");
                 }
             }
             throw new RuntimeException("Erro ao salvar cndidato: " + e.getMessage(), e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        }
+    }
+
+    public void saveCurriculo(Long idCandidato, MultipartFile curriculo) {
+
+        Candidato candidato = candidatoRepository.findById(idCandidato).orElseThrow(() -> new EntityNotFoundException("Candidadto não Encontrado"));
+
+        if (candidato.getCaminhoCurriculo() != null && !candidato.getCaminhoCurriculo().isBlank()) {
+            fileStorageService.excluirCurriculo(candidato.getCaminhoCurriculo());
+        }
+
+        String novoCaminho = fileStorageService.salvarCurriculo(curriculo, candidato.getNome());
+        candidato.setCaminhoCurriculo(novoCaminho);
+        candidatoRepository.save(candidato);
+    }
+
+    private void fillCargosAndSkills(Candidato candidato) {
+        candidato.setCargo(cargoService.findOrCreate(CargoMapper.INSTANCE.toDTO(candidato.getCargo())));
+
+        if (candidato.getExperiencias() != null) {
+            candidato.getExperiencias().forEach(exp -> {
+                Cargo cargo = cargoService.findOrCreate(CargoMapper.INSTANCE.toDTO(exp.getCargo()));
+                exp.setCargo(cargo);
+            });
+        }
+
+        if (candidato.getCandidatoSkills() != null) {
+            candidato.getCandidatoSkills().forEach(cs -> {
+                Skill skill = skillService.findOrCreate(SkillMapper.INSTANCE.toDTO(cs.getSkill()));
+                cs.setSkill(skill);
+            });
+        }
+    }
+
+    private void vincularEntidadesFilhas(Candidato candidato) {
+        Usuario usuarioLogado = ControllerUtils.getUsuarioLogado();
+
+        if (candidato.getCandidatoSkills() != null) {
+            candidato.getCandidatoSkills().forEach(cs -> {
+                cs.setCandidato(candidato);
+                cs.setUsuarioCriacao(usuarioLogado);
+                cs.setSituacao(Situacao.ATIVO);
+            });
+        }
+
+        if (candidato.getExperiencias() != null) {
+            candidato.getExperiencias().forEach(exp -> {
+                exp.setCandidato(candidato);
+                exp.setUsuarioCriacao(usuarioLogado);
+                exp.setSituacao(Situacao.ATIVO);
+            });
+        }
+
+        if (candidato.getAnotacoes() != null) {
+            candidato.getAnotacoes().forEach(anot -> {
+                anot.setCandidato(candidato);
+                anot.setUsuarioCriacao(usuarioLogado);
+                anot.setSituacao(Situacao.ATIVO);
+            });
         }
     }
 }

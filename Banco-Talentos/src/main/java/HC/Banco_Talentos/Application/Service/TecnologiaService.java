@@ -20,22 +20,22 @@ public class TecnologiaService {
 
     private final TecnologiaRepository tecnologiaRepository;
 
-    public List<TecnologiaDTO> getAll() {
-        return TecnologiaMapper.INSTANCE.toDTO(tecnologiaRepository.findAll());
+    public List<Tecnologia> getAll() {
+        return tecnologiaRepository.findAll();
     }
 
-    public TecnologiaDTO findByid(Long id){
-        return TecnologiaMapper.INSTANCE.toDTO(tecnologiaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Tecnologia Não encontrada")));
+    public Tecnologia findByid(Long id){
+        return tecnologiaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Tecnologia Não encontrada"));
     }
 
-    public TecnologiaDTO create(TecnologiaDTO dto) {
+    public Tecnologia create(TecnologiaDTO dto) {
 
         Tecnologia tecnologia = TecnologiaMapper.INSTANCE.toEntity(dto);
         tecnologia.setSituacao(Situacao.ATIVO);
         tecnologia.setUsuarioCriacao(ControllerUtils.getUsuarioLogado());
 
         try {
-            return TecnologiaMapper.INSTANCE.toDTO(tecnologiaRepository.save(tecnologia));
+            return tecnologiaRepository.save(tecnologia);
 
         } catch (DataIntegrityViolationException e) {
             if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException constraintViolation) {
@@ -49,12 +49,12 @@ public class TecnologiaService {
         }
     }
 
-    public TecnologiaDTO update(Long id, TecnologiaDTO dto) {
+    public Tecnologia update(Long id, TecnologiaDTO dto) {
 
         Tecnologia tecnologia = tecnologiaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Tecnologia Não encontrada"));
         tecnologia.setNome(dto.getNome());
         try {
-            return TecnologiaMapper.INSTANCE.toDTO(tecnologiaRepository.save(tecnologia));
+            return tecnologiaRepository.save(tecnologia);
 
         } catch (DataIntegrityViolationException e) {
             if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException constraintViolation) {

@@ -1,5 +1,6 @@
 package HC.Banco_Talentos.Interface.Controller;
 
+import HC.Banco_Talentos.Interface.DTO.Mapper.CandidatoSkillMapper;
 import HC.Banco_Talentos.Interface.DTO.Request.CandidatoSkillRequestDTO;
 import HC.Banco_Talentos.Interface.DTO.Response.CandidatoSkillResponseDTO;
 import HC.Banco_Talentos.Application.Service.CandidatoSkillService;
@@ -19,12 +20,12 @@ public class CandidatoSkillController {
     @GetMapping
     public ResponseEntity<Page<CandidatoSkillResponseDTO>> listAll(@RequestParam(name = "page", defaultValue = "0") int page,
                                                                   @RequestParam(name = "limit", defaultValue = "10") int limit){
-        return ResponseEntity.ok(candidatoSkillService.getAll(PageRequest.of(page, limit)));
+        return ResponseEntity.ok(candidatoSkillService.getAll(PageRequest.of(page, limit)).map(CandidatoSkillMapper.INSTANCE :: toResponseDTO));
     }
 
     @PostMapping
     public ResponseEntity<CandidatoSkillResponseDTO> create(@RequestBody CandidatoSkillRequestDTO dto){
-        return ResponseEntity.ok(candidatoSkillService.create(dto));
+        return ResponseEntity.ok(CandidatoSkillMapper.INSTANCE.toResponseDTO(candidatoSkillService.create(dto)));
     }
 
 }

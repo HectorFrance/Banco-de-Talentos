@@ -20,22 +20,22 @@ public class ProfissaoService {
 
     private final ProfissaoRepository profissaoRepository;
 
-    public List<ProfissaoDTO> getAll() {
-        return ProfissaoMapper.INSTANCE.toDTO(profissaoRepository.findAll());
+    public List<Profissao> getAll() {
+        return profissaoRepository.findAll();
     }
 
-    public ProfissaoDTO findById(Long id) {
-        return ProfissaoMapper.INSTANCE.toDTO(profissaoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Profissão não encontrada")));
+    public Profissao findById(Long id) {
+        return profissaoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Profissão não encontrada"));
     }
 
-    public ProfissaoDTO create(ProfissaoDTO profissaoDTO) {
+    public Profissao create(ProfissaoDTO profissaoDTO) {
 
         Profissao profissao = ProfissaoMapper.INSTANCE.toEntity(profissaoDTO);
         profissao.setSituacao(Situacao.ATIVO);
         profissao.setUsuarioCriacao(ControllerUtils.getUsuarioLogado());
 
         try {
-            return ProfissaoMapper.INSTANCE.toDTO(profissaoRepository.save(profissao));
+            return profissaoRepository.save(profissao);
 
         } catch (DataIntegrityViolationException e) {
             if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException constraintViolation) {
@@ -49,13 +49,13 @@ public class ProfissaoService {
         }
     }
 
-    public ProfissaoDTO update (Long id, ProfissaoDTO profissaoDTO) {
+    public Profissao update (Long id, ProfissaoDTO profissaoDTO) {
 
         Profissao profissao = profissaoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Profissão não encontrada"));
         profissao.setNome(profissaoDTO.getNome());
 
         try {
-            return ProfissaoMapper.INSTANCE.toDTO(profissaoRepository.save(profissao));
+            return profissaoRepository.save(profissao);
 
         } catch (DataIntegrityViolationException e) {
             if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException constraintViolation) {

@@ -23,21 +23,21 @@ public class SkillService {
     private final SkillRepository skillRepository;
     private final TecnologiaService tecnologiaService;
 
-    public List<SkillResponseDTO> getAll() {
-        return SkillMapper.INSTANCE.toResponseDTO(skillRepository.findAll());
+    public List<Skill> getAll() {
+        return skillRepository.findAll();
     }
 
-    public SkillResponseDTO findById(Long id) {
-        return SkillMapper.INSTANCE.toResponseDTO(skillRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Skill Não encontrada")));
+    public Skill findById(Long id) {
+        return skillRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Skill Não encontrada"));
     }
 
-    public SkillResponseDTO create(SkillRequestDTO skillRequestDTO) {
+    public Skill create(SkillRequestDTO skillRequestDTO) {
         Skill skill = SkillMapper.INSTANCE.toEntity(skillRequestDTO);
         skill.setSituacao(Situacao.ATIVO);
         skill.setUsuarioCriacao(ControllerUtils.getUsuarioLogado());
 
         try{
-            return SkillMapper.INSTANCE.toResponseDTO(skillRepository.save(skill));
+            return skillRepository.save(skill);
         }catch (DataIntegrityViolationException e){
             if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException constraintViolation){
                 String constraintName = constraintViolation.getConstraintName();
@@ -50,16 +50,8 @@ public class SkillService {
         }
     }
 
-    public SkillRequestDTO findOrCreate(SkillRequestDTO skillRequestDTO){
+    public Skill findOrCreate(SkillRequestDTO skillRequestDTO){
         Optional<Skill> skillOptional = skillRepository.findByTecnologiaIdAndNivel(skillRequestDTO.getTecnologia(),skillRequestDTO.getNivel());
-
-        if(skillOptional.isPresent()){
-            return SkillMapper.INSTANCE.toDTO(skillOptional.get());
-        } else {
-            SkillResponseDTO skillNova = create(skillRequestDTO);
-            SkillRequestDTO skillRetorno = new SkillRequestDTO();
-            skillRetorno.setId(skillNova.getId());
-            return skillRetorno;
-        }
+        return skillOptional.orElseGet(() -> create(skillRequestDTO));
     }
 }

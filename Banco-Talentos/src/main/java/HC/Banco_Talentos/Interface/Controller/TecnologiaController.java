@@ -1,5 +1,6 @@
 package HC.Banco_Talentos.Interface.Controller;
 
+import HC.Banco_Talentos.Interface.DTO.Mapper.TecnologiaMapper;
 import HC.Banco_Talentos.Interface.DTO.TecnologiaDTO;
 import HC.Banco_Talentos.Application.Service.TecnologiaService;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +19,12 @@ public class TecnologiaController {
 
     @GetMapping
     public ResponseEntity<List<TecnologiaDTO>> listAll(){
-        return ResponseEntity.ok(tecnologiaService.getAll());
+        return ResponseEntity.ok(tecnologiaService.getAll().stream().map(TecnologiaMapper.INSTANCE :: toDTO).toList());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<TecnologiaDTO> cadastrar(@RequestBody TecnologiaDTO request) {
-        return ResponseEntity.ok(tecnologiaService.create(request));
+        return ResponseEntity.ok(TecnologiaMapper.INSTANCE.toDTO(tecnologiaService.create(request)));
     }
 }
